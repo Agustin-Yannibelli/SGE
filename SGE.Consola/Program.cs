@@ -1,2 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using SGE.Aplicacion;
+using SGE.Repositorios;
+
+//configurar dependencias 
+IExpedienteRepositorio repoExp = new RepositorioExpedienteTXT();
+ITramiteRepositorio repoTram = new RepositorioTramiteTXT();
+
+
+//crear casos de uso 
+
