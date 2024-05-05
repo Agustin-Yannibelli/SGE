@@ -24,5 +24,17 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
       sw.WriteLine(expediente.UsuarioUltModificacion);
       sw.WriteLine(expediente.Estado);
     }
-  }  
+  } 
+
+
+
+  public void BajaEspediente(Expediente expediente, int IdUser)
+  {
+    ServicioAutorizacionProvisorio permiso = new ServicioAutorizacionProvisorio();
+    if(!permiso.PoseeElPermiso(IdUser, Permiso.BajaEspediente))
+    {
+      Console.WriteLine("El usuario no tiene permiso para dicha accion");
+      return;
+    }
+  } 
 }
