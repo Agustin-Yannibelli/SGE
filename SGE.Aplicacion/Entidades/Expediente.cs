@@ -9,7 +9,7 @@ public class Expediente
   public int UsuarioUltModificacion {get;set;}
   public Estado Estado{get;set;}
 
-
+  
   public override string ToString()
   {
     return $"{IdTramite}";

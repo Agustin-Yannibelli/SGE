@@ -31,7 +31,7 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
   public void BajaEspediente(Expediente expediente, int IdUser)
   {
     ServicioAutorizacionProvisorio permiso = new ServicioAutorizacionProvisorio();
-    if(!permiso.PoseeElPermiso(IdUser, Permiso.BajaEspediente))
+    if(!permiso.PoseeElPermiso(IdUser, Permiso.BajaExpediente))
     {
       Console.WriteLine("El usuario no tiene permiso para dicha accion");
       return;
