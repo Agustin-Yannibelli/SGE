@@ -4,5 +4,6 @@ namespace SGE.Aplicacion;
 
 public enum Permiso
 {
-   permiso1 = 1
+   permiso1 = 1,
+   AltaExpediente=1
 }
