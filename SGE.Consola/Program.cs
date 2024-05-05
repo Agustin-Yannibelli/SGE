@@ -8,3 +8,4 @@ ITramiteRepositorio repoTram = new RepositorioTramiteTXT();
 
 //crear casos de uso 
 
+var altaExpediente = new ExpedienteAlta(repoExp);
