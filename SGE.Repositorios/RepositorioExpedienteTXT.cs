@@ -28,7 +28,7 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
 
 
 
-  public void BajaEspediente(Expediente expediente, int IdUser)
+  public void BajaEspediente(int IdTramite, int IdUser)
   {
     ServicioAutorizacionProvisorio permiso = new ServicioAutorizacionProvisorio();
     if(!permiso.PoseeElPermiso(IdUser, Permiso.BajaExpediente))
@@ -37,4 +37,17 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
       return;
     }
   } 
+
+  public void ModificarExpediente(Expediente expediente, int IdUser)
+  {
+
+  }
+
+  public List<Expediente> ListarTodosExpedientes()
+  {
+    var resultado = new List<Expediente>();
+
+    // desarrollo para listar los expedientes sin tramite 
+    return resultado;
+  }
 }
