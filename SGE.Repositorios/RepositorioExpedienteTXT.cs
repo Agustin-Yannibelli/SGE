@@ -4,22 +4,28 @@ using SGE.Aplicacion;
 public class RepositorioExpedienteTXT : IExpedienteRepositorio
 {
   readonly string _nombreArch = @"C:\Users\agust\OneDrive\Escritorio\proyectoExpedientes\SGE\SGE.Repositorios\Expedientes.txt";
-  //private readonly ITramiteRepositorio? _tramiteRepo; //para poder usar el repo de tramites 
+  private int ultimoId = 0; //para hacer los id unicos     
 
 
 
 
-
-  public void AltaExpediente(Expediente expediente, int IdUser)
+  public int GenerarUnico()
   {
-      ServicioAutorizacionProvisorio permiso = new ServicioAutorizacionProvisorio();
-    try
-    {  
-      if(!permiso.PoseeElPermiso(IdUser, Permiso.AltaExpediente))
+    return ++ultimoId;
+  }
+
+  public void AltaExpediente(Expediente expediente, int IdUser, DateTime fechaCreacion, DateTime fechaModificacion)
+  {
+      var ServicioAutorizacion = new ServicioAutorizacionProvisorio();
+  
+      if(!ServicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteAlta))
       {
-      Console.WriteLine("El usuario no tiene permiso para dicha accion");
-      return;
+        throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
       }
+      expediente.IdTramite = GenerarUnico();
+      expediente.FechaYHoraCreacion = fechaCreacion;
+      expediente.FechaYHoraUltModificacion = fechaModificacion;
+      
       using (var sw = new StreamWriter(_nombreArch, true))
       {
         sw.WriteLine(expediente.IdTramite);
@@ -29,34 +35,54 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
         sw.WriteLine(expediente.UsuarioUltModificacion);
         sw.WriteLine(expediente.Estado);
       }
-    }catch(Exception e)
-    {
-      throw new ValidacionException(e.Message);
-    }
   } 
 
 
 
   public void BajaExpediente(int IdTramite, int IdUser)
   {
-    ServicioAutorizacionProvisorio permiso = new ServicioAutorizacionProvisorio();
-    if(!permiso.PoseeElPermiso(IdUser, Permiso.BajaExpediente))
+    var ServicioAutorizacion  = new ServicioAutorizacionProvisorio();
+    if(!ServicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteBaja))
     {
-      Console.WriteLine("El usuario no tiene permiso para dicha accion");
-      return;
+      throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
     }
+
+    // algortimo para dar de baja expediente y tambien sus tramites asociados 
   } 
 
   public void ModificarExpediente(Expediente expediente, int IdUser)
   {
+    var ServicioAutorizacion  = new ServicioAutorizacionProvisorio();
+    if(!ServicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteBaja))
+    {
+      throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
+    }
 
+    //algoritmo para modificar expediente 
   }
 
   public List<Expediente> ExpedienteConsultaTodos()
+  /*genera la lista de expedientes (sin incluir sus tramites)*/
   {
     var resultado = new List<Expediente>();
 
-    // desarrollo para listar los expedientes sin tramite 
+  
+      using var sr = new StreamReader(_nombreArch);
+      while(!sr.EndOfStream)
+      {
+        var exp = new Expediente();
+        exp.IdTramite = int.Parse(sr.ReadLine() ?? "");
+        exp.Caratula = sr.ReadLine() ?? "";
+        exp.FechaYHoraCreacion = DateTime.Parse(sr.ReadLine() ?? "");
+        exp.FechaYHoraUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
+        exp.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+        string estadoStr = sr.ReadLine() ?? "";
+        exp.Estado = (Estado)Enum.Parse(typeof(Estado), estadoStr);
+        resultado.Add(exp);
+      } 
+    
+
+    //en resultado queda la lista de con todos los datos del txt expediente, SIN tramites. 
     return resultado;
   }
 
