@@ -4,6 +4,6 @@ public class ExpedienteBajaUseCase(IExpedienteRepositorio repoExp)
 {
     public void Ejecutar(int IdTramite, int IdUser)
     {
-        repoExp.BajaEspediente(IdTramite, IdUser);
+        repoExp.BajaExpediente(IdTramite, IdUser);
     }
 }

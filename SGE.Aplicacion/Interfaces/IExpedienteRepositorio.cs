@@ -3,10 +3,12 @@ namespace SGE.Aplicacion;
 public interface IExpedienteRepositorio
 {
   void AltaExpediente(Expediente expediente, int IdUser); //cuando desarrolle el alta debo tener en cuenta la validacion del user para la accion 
-  void BajaEspediente(int IdTramite, int IdUser);
+  void BajaExpediente(int IdTramite, int IdUser);
   void ModificarExpediente(Expediente expediente, int IdUser);
 
-  List<Expediente> ListarTodosExpedientes();
+  List<Expediente> ExpedienteConsultaTodos();
 
-  //falta ver el tema de listar los expedientes y sus tramites usando id 
+  List<Expediente> ExpedienteConsultaPorId(int IdTramite);
+
+   
 }

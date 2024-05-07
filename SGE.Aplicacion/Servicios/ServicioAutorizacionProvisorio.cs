@@ -6,6 +6,6 @@ public class ServicioAutorizacionProvisorio : IServicioAutorizacion
 {
   public  bool PoseeElPermiso(int IdUsuario, Permiso permiso)
   {
-    return IdUsuario == (int)permiso;
+    return IdUsuario == (int)permiso; 
   }
 }

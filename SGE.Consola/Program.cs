@@ -8,7 +8,8 @@ ITramiteRepositorio repoTram = new RepositorioTramiteTXT();
 
 //crear casos de uso 
 
-var altaExpediente = new ExpedienteAlta(repoExp);
+var altaExpediente = new ExpedienteAltaUseCase(repoExp);
+var bajaExpediente = new ExpedienteBajaUseCase(repoExp);
 
 
 
@@ -16,8 +17,11 @@ var altaExpediente = new ExpedienteAlta(repoExp);
 
 //ejecutar casos de uso 
 
-altaExpediente.Ejecutar(new Expediente(),2); //prueba usuario no autorizado
+Expediente e = new Expediente();
 
+altaExpediente.Ejecutar(e,2); //prueba usuario no autorizado
+
+bajaExpediente.Ejecutar(0,2); 
 
 
 
