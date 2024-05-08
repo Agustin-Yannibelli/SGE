@@ -2,14 +2,14 @@ namespace SGE.Aplicacion;
 
 public class ExpedienteValidador
 {
-  public bool Validar(string Caratula, int UsuarioUltModificacion, out string mensajeError)
+  public bool Validar(string? Caratula, int UsuarioUltModificacion, out string mensajeError)
   {
     try
     {
       mensajeError = "";
-      if(string.IsNullOrWhiteSpace(Caratula))
+      if(Caratula == null)
       {
-        mensajeError = "La caraatula del expediente no puede estar vacia.\n";
+        mensajeError = "La caratula del expediente no puede estar vacia.\n";
       } 
       if(UsuarioUltModificacion <= 0)
       {

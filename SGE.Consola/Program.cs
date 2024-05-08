@@ -17,11 +17,13 @@ var bajaExpediente = new ExpedienteBajaUseCase(repoExp);
 
 //ejecutar casos de uso 
 
-Expediente e = new Expediente();
+Expediente e = new Expediente(){Caratula="es la caratula", UsuarioUltModificacion =1}; 
+//Expediente e2 = new Expediente();
 
-altaExpediente.Ejecutar(e,2); //prueba usuario no autorizado
+altaExpediente.Ejecutar(e,1); //prueba usuario no autorizado
+//altaExpediente.Ejecutar(e2,1);
 
-bajaExpediente.Ejecutar(0,2); 
+
 
 
 

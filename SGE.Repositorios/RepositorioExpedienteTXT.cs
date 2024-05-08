@@ -16,12 +16,6 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
 
   public void AltaExpediente(Expediente expediente, int IdUser, DateTime fechaCreacion, DateTime fechaModificacion)
   {
-      var ServicioAutorizacion = new ServicioAutorizacionProvisorio();
-  
-      if(!ServicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteAlta))
-      {
-        throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
-      }
       expediente.IdTramite = GenerarUnico();
       expediente.FechaYHoraCreacion = fechaCreacion;
       expediente.FechaYHoraUltModificacion = fechaModificacion;
