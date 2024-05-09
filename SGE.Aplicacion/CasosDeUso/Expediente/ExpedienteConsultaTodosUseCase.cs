@@ -2,8 +2,13 @@ namespace SGE.Aplicacion;
 
 public class ExpedienteConsultaTodosUseCase(IExpedienteRepositorio repoExp)
 {
-  public void Ejecutar(int IdTramite)
+  public void Ejecutar()
   {
-    repoExp.ExpedienteConsultaTodos();
+    List<Expediente> l = repoExp.ExpedienteConsultaTodos();
+
+    foreach(Expediente e in l)
+    {
+      Console.WriteLine(e.ToString());
+    }
   }
 }

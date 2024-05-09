@@ -53,42 +53,38 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
     }
   } 
 
-  public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fechaModificacion)
-  {
+public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fechaModificacion)
+{
     List<Expediente> lExpedientes = ExpedienteConsultaTodos();
+    bool expedienteEncontrado = false;
 
-    Expediente? expModificar = null;
-    foreach(Expediente e in lExpedientes)
+    using (StreamWriter sw = new StreamWriter(_nombreArch, false))
     {
-      if(e.IdTramite == expediente.IdTramite)
-      {
-        expModificar = e;
-        break;
-      }
-    } 
-    if(expModificar != null)
-    {
-      expModificar.Caratula = expediente.Caratula;
-      expModificar.FechaYHoraUltModificacion = fechaModificacion;
-      expModificar.UsuarioUltModificacion = IdUser;
-    
-
-    using (StreamWriter sw = new StreamWriter(_nombreArch,false))
-    {
-      foreach(Expediente e1 in lExpedientes)
-      {
-        sw.WriteLine(expediente.IdTramite);
-        sw.WriteLine(expModificar.Caratula);
-        sw.WriteLine(expediente.FechaYHoraCreacion);
-        sw.WriteLine(expModificar.FechaYHoraUltModificacion);
-        sw.WriteLine(expModificar.UsuarioUltModificacion);
-        sw.WriteLine(expediente.Estado);
-      }
+        foreach (Expediente e in lExpedientes)
+        {
+            if (e.IdTramite == expediente.IdTramite)
+            {
+                e.Caratula = expediente.Caratula;
+                e.FechaYHoraUltModificacion = fechaModificacion;
+                e.UsuarioUltModificacion = IdUser;
+                expedienteEncontrado = true;
+            }
+            sw.WriteLine(e.IdTramite);
+            sw.WriteLine(e.Caratula);
+            sw.WriteLine(e.FechaYHoraCreacion);
+            sw.WriteLine(e.FechaYHoraUltModificacion);
+            sw.WriteLine(e.UsuarioUltModificacion);
+            sw.WriteLine(e.Estado);
+        }
     }
-    Console.WriteLine($"se modifico el expediente {expediente.IdTramite}");
-  }
-
- 
+    if (expedienteEncontrado)
+    {
+        Console.WriteLine($"Se modificó el expediente {expediente.IdTramite}");
+    }
+    else
+    {
+        Console.WriteLine($"No se encontró un expediente con ID {expediente.IdTramite}");
+    }
   }
 
   public List<Expediente> ExpedienteConsultaTodos()

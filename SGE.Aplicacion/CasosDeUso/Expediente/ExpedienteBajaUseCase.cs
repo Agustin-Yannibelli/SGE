@@ -4,26 +4,37 @@ public class ExpedienteBajaUseCase(IExpedienteRepositorio repoExp, IServicioAuto
 {
     public void Ejecutar(int IdTramite, int IdUser)
     {
-      bool esta = repoExp.ExisteElId(IdTramite);
-      if(!servicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteBaja))
+      try
       {
-        throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
-      }
-      if(!esta)
-      {
-        throw new RepositorioException("la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
-      }
-      repoExp.BajaExpediente(IdTramite, IdUser); 
-      List<Tramite> TramitesAEliminar = tramiteRepositorio.ListaDeTramites();
-
-      List<Tramite> copiaParaIterar = new List<Tramite>(TramitesAEliminar); //sin esto suele producir una Excepcion o errores
-      foreach(Tramite t in copiaParaIterar)
-      {
-        if(t.ExpedienteId == IdTramite)
+        bool esta = repoExp.ExisteElId(IdTramite);
+        if(!servicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteBaja))
         {
-          tramiteRepositorio.BajaTramite(t,IdUser);
-          TramitesAEliminar.Remove(t);
+          throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
         }
+        if(!esta)
+        {
+          throw new RepositorioException("la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
+        }
+        repoExp.BajaExpediente(IdTramite, IdUser); 
+        List<Tramite> TramitesAEliminar = tramiteRepositorio.ListaDeTramites();
+
+        List<Tramite> copiaParaIterar = new List<Tramite>(TramitesAEliminar); //sin esto suele producir una Excepcion o errores
+        foreach(Tramite t in copiaParaIterar)
+        {
+          if(t.ExpedienteId == IdTramite)
+          {
+            tramiteRepositorio.BajaTramite(t,IdUser);
+            TramitesAEliminar.Remove(t);
+          }
+        }
+      }
+      catch(AutorizacionException ex)
+      {
+        Console.WriteLine($"Error de autorización: {ex.Message}");
+      }
+      catch (RepositorioException ex)
+      {
+        Console.WriteLine($"Error de repositorio: {ex.Message}");
       }
     }
 }

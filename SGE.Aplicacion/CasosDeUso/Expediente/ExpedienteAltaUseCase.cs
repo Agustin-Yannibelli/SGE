@@ -10,12 +10,18 @@ public class ExpedienteAltaUseCase(IExpedienteRepositorio repoExp, IServicioAuto
     DateTime fechaModificacion = DateTime.Now;
 
     
-    
-    if(!(servicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteAlta) && Validar(expediente.Caratula,expediente.UsuarioUltModificacion,out string mensajeError)))
+    try
+    {
+      if(!(servicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteAlta) && Validar(expediente.Caratula,expediente.UsuarioUltModificacion,out string mensajeError)))
       {
         throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
       }
 
-    repoExp.AltaExpediente(expediente, IdUser, fechaCreacion, fechaModificacion);
+      repoExp.AltaExpediente(expediente, IdUser, fechaCreacion, fechaModificacion);
+    }
+    catch(AutorizacionException ex)
+    {
+      Console.WriteLine($"Error de autorización: {ex.Message}");
+    }
   }
 }  
