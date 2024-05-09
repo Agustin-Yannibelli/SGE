@@ -10,6 +10,9 @@ public class Tramite
   public DateTime FechaYHoraUltModificacion {get;set;}
   public int UsuarioUltModificacion {get;set;}
   
-
+  public override string ToString()
+  {
+    return $"Tramite id = {IdTramite}";
+  }
 
 }

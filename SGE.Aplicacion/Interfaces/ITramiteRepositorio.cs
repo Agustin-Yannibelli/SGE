@@ -7,4 +7,5 @@ public interface ITramiteRepositorio
   void BajaTramite(Tramite tramite, int IdUser);
   void ModificacionTramite(Tramite tramite, int IdUser);
   List<Tramite> ListarTramites(string etiqueta);
+  List<Tramite> ListaDeTramites();
 }

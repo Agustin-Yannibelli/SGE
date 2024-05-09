@@ -54,12 +54,44 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
       }
 
     }
-
-
-
     return resultado;
   }
 
 
+
+  //metodos adicionales 
+
+  public List<Tramite> ListaDeTramites()
+  {
+    var resultado = new List<Tramite>();
+    using var sr = new StreamReader(_nombreArch);
+
+    while(!sr.EndOfStream)
+    {
+      var T  = new Tramite();
+      T.IdTramite = int.Parse(sr.ReadLine() ?? "");
+      T.ExpedienteId = int.Parse(sr.ReadLine() ?? "");
+
+      string? etiquetaStr = sr.ReadLine();
+      if(!string.IsNullOrEmpty(etiquetaStr))
+      {
+        if(Etiqueta.TryParse(etiquetaStr, out Etiqueta etiqueta))
+        {
+          T.Etiqueta = etiqueta;
+        }
+        else
+        {
+          Console.WriteLine("no se puede leer el valor etiqueta");
+        }
+
+        T.ContenidoTramite = sr.ReadLine();
+        T.FechaYHoraCreacion = DateTime.Parse(sr.ReadLine() ?? "");
+        T.FechaYHoraUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
+        T.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+        resultado.Add(T);
+      }
+    }
+    return resultado;
+  }
 
 }

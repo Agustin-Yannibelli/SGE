@@ -29,30 +29,66 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
         sw.WriteLine(expediente.UsuarioUltModificacion);
         sw.WriteLine(expediente.Estado);
       }
+      Console.WriteLine($"se dio de alta el expediente {expediente.IdTramite}");
   } 
 
 
 
-  public void BajaExpediente(int IdTramite, int IdUser)
+  public void BajaExpediente(int IdTramite, int IdUser) //da de baja el expediente que le llega como param
   {
-    var ServicioAutorizacion  = new ServicioAutorizacionProvisorio();
-    if(!ServicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteBaja))
-    {
-      throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
-    }
+    List<Expediente> listaExpedientes = ExpedienteConsultaTodos();
+    Expediente? ExpAEliminar = null;
 
-    // algortimo para dar de baja expediente y tambien sus tramites asociados 
+    foreach(Expediente e in listaExpedientes)
+    {
+      if(e.IdTramite == IdTramite)
+      {
+        ExpAEliminar = e;
+        break;
+      }
+    }
+    if(ExpAEliminar != null)
+    {
+      listaExpedientes.Remove(ExpAEliminar); 
+    }
   } 
 
-  public void ModificarExpediente(Expediente expediente, int IdUser)
+  public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fechaModificacion)
   {
-    var ServicioAutorizacion  = new ServicioAutorizacionProvisorio();
-    if(!ServicioAutorizacion.PoseeElPermiso(IdUser, Permiso.ExpedienteBaja))
-    {
-      throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
-    }
+    List<Expediente> lExpedientes = ExpedienteConsultaTodos();
 
-    //algoritmo para modificar expediente 
+    Expediente? expModificar = null;
+    foreach(Expediente e in lExpedientes)
+    {
+      if(e.IdTramite == expediente.IdTramite)
+      {
+        expModificar = e;
+        break;
+      }
+    } 
+    if(expModificar != null)
+    {
+      expModificar.Caratula = expediente.Caratula;
+      expModificar.FechaYHoraUltModificacion = fechaModificacion;
+      expModificar.UsuarioUltModificacion = IdUser;
+    
+
+    using (StreamWriter sw = new StreamWriter(_nombreArch,false))
+    {
+      foreach(Expediente e1 in lExpedientes)
+      {
+        sw.WriteLine(expediente.IdTramite);
+        sw.WriteLine(expModificar.Caratula);
+        sw.WriteLine(expediente.FechaYHoraCreacion);
+        sw.WriteLine(expModificar.FechaYHoraUltModificacion);
+        sw.WriteLine(expModificar.UsuarioUltModificacion);
+        sw.WriteLine(expediente.Estado);
+      }
+    }
+    Console.WriteLine($"se modifico el expediente {expediente.IdTramite}");
+  }
+
+ 
   }
 
   public List<Expediente> ExpedienteConsultaTodos()
@@ -74,21 +110,43 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
         exp.Estado = (Estado)Enum.Parse(typeof(Estado), estadoStr);
         resultado.Add(exp);
       } 
-    
-
     //en resultado queda la lista de con todos los datos del txt expediente, SIN tramites. 
     return resultado;
   }
 
   
   
-  public List<Expediente> ExpedienteConsultaPorId(int IdTramite)
+  public Expediente? ExpedienteConsultaPorId(int IdTramite)
   {
-    var resultado = new List<Expediente>();
+    Expediente? resultado = null;
 
-   
+    List<Expediente> lista = ExpedienteConsultaTodos();
+
+    foreach(Expediente e in lista)
+    {
+      if(e.IdTramite == IdTramite)
+      {
+        resultado = e;
+        break;
+      }
+    }
+    return resultado;   
+  }
 
 
-    return resultado;
+  //metodos accesorios
+
+  public bool ExisteElId(int IdTramite)
+  {
+    List<Expediente> listaExpedientes = ExpedienteConsultaTodos();
+    bool existe = false;
+    foreach(Expediente e in listaExpedientes)
+    {
+      if(e.IdTramite == IdTramite)
+      {
+        existe = true;
+      }
+    }
+    return existe;
   }
 }
