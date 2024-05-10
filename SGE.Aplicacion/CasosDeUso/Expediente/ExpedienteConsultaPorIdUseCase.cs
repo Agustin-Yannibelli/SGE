@@ -1,8 +1,10 @@
+using System.Collections;
+
 namespace SGE.Aplicacion;
 
 public class ExpedienteConsultaPorIdUseCase(IExpedienteRepositorio repoExp, ITramiteRepositorio tramiteRepositorio)
 {
-  public void Ejecutar(int IdTramite)
+  public Expediente Ejecutar(int IdTramite)
   {
     bool esta = repoExp.ExisteElId(IdTramite);
     if(!esta)
@@ -12,15 +14,28 @@ public class ExpedienteConsultaPorIdUseCase(IExpedienteRepositorio repoExp, ITra
     Expediente? e = repoExp.ExpedienteConsultaPorId(IdTramite); //me traigo en e el expediente
     
     List<Tramite> lTramites = tramiteRepositorio.ListaDeTramites(); //me traigo la lista de tramites
+    List<Tramite> TramitesDelExp = new List<Tramite>();
 
-    if(e != null) Console.WriteLine(e.ToString()); //imprimo el expediente
     foreach(Tramite t in lTramites)
     {
       if(t.ExpedienteId == IdTramite)
       {
-        Console.WriteLine(t.ToString()); //imprimo todos los tramites que son de ese expediente
+        
+        TramitesDelExp.Add(t);
+           
       }
     }
-
+    if(e != null)
+    {
+       e.TramitesDelExpediente = new List<Tramite>(TramitesDelExp);
+       Console.WriteLine("se retornaria la lista");
+    }
+    if(e == null)
+    {
+      throw new RepositorioException("la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
+    } 
+    return e;
+    
+    
   }
 }

@@ -37,19 +37,26 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
   public void BajaExpediente(int IdTramite, int IdUser) //da de baja el expediente que le llega como param
   {
     List<Expediente> listaExpedientes = ExpedienteConsultaTodos();
-    Expediente? ExpAEliminar = null;
+    
+    List<Expediente> listaModificada  = new List<Expediente>();
 
     foreach(Expediente e in listaExpedientes)
     {
-      if(e.IdTramite == IdTramite)
+      if(e.IdTramite != IdTramite)
       {
-        ExpAEliminar = e;
-        break;
+        listaModificada.Add(e);
       }
     }
-    if(ExpAEliminar != null)
+    using StreamWriter sw = new StreamWriter(_nombreArch,false);
+
+    foreach(Expediente e in listaModificada)
     {
-      listaExpedientes.Remove(ExpAEliminar); 
+      sw.WriteLine(e.IdTramite);
+      sw.WriteLine(e.Caratula);
+      sw.WriteLine(e.FechaYHoraCreacion);
+      sw.WriteLine(e.FechaYHoraUltModificacion);
+      sw.WriteLine(e.UsuarioUltModificacion);
+      sw.WriteLine(e.Estado);
     }
   } 
 
@@ -145,4 +152,6 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
     }
     return existe;
   }
+
+
 }
