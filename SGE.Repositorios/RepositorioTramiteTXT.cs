@@ -4,15 +4,57 @@ using SGE.Aplicacion;
 public class RepositorioTramiteTXT : ITramiteRepositorio
 {
   readonly string _nombreArch = @"C:\Users\agust\OneDrive\Escritorio\proyectoExpedientes\SGE\SGE.Repositorios\Tramites.txt";
+  private int ultimoId = 0;
 
-  public void AltaTramite(Tramite tramite, int IdUser)
+
+  public int GenerarUnico()
   {
-
+    return ++ultimoId;
+  }
+  public void AltaTramite(Tramite tramite, int IdUser, DateTime fechaCreacion, DateTime fechaModificacion)
+  {
+    tramite.IdTramite = GenerarUnico();
+    tramite.FechaYHoraCreacion = fechaCreacion;
+    tramite.FechaYHoraUltModificacion = fechaModificacion;
+    
+    using (var sw = new StreamWriter(_nombreArch,true))
+    {
+      sw.WriteLine(tramite.IdTramite);
+      sw.WriteLine(tramite.ExpedienteId);
+      sw.WriteLine(tramite.Etiqueta);
+      sw.WriteLine(tramite.ContenidoTramite);
+      sw.WriteLine(tramite.FechaYHoraCreacion);
+      sw.WriteLine(tramite.FechaYHoraUltModificacion);
+      sw.WriteLine(tramite.UsuarioUltModificacion);
+      
+    }
+    Console.WriteLine($"se dio de alta el tramite {tramite.IdTramite} ligado al expediente {tramite.ExpedienteId}");
   }
 
   public void BajaTramite(Tramite tramite, int IdUser)
   {
-    //desarrollo
+    List<Tramite> totalTramites = ListaDeTramites();
+    List<Tramite> listaModificada = new List<Tramite>();
+
+    foreach(Tramite t in totalTramites)
+    {
+      if(t.IdTramite != tramite.IdTramite)
+      {
+        listaModificada.Add(t);
+      }
+    }
+    using StreamWriter sw = new StreamWriter(_nombreArch,false);
+
+    foreach(Tramite t in listaModificada)
+    {
+      sw.WriteLine(tramite.IdTramite);
+      sw.WriteLine(tramite.ExpedienteId);
+      sw.WriteLine(tramite.Etiqueta);
+      sw.WriteLine(tramite.ContenidoTramite);
+      sw.WriteLine(tramite.FechaYHoraCreacion);
+      sw.WriteLine(tramite.FechaYHoraUltModificacion);
+      sw.WriteLine(tramite.UsuarioUltModificacion);
+    }  
   }
 
   public void ModificacionTramite(Tramite tramite, int IdUser)
