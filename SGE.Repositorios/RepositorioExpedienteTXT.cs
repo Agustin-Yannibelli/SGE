@@ -4,17 +4,19 @@ using SGE.Aplicacion;
 public class RepositorioExpedienteTXT : IExpedienteRepositorio
 {
   readonly string _nombreArch = @"C:\Users\agust\OneDrive\Escritorio\proyectoExpedientes\SGE\SGE.Repositorios\Expedientes.txt";
-  private int ultimoId = 0; //para hacer los id unicos     
+  private int ultimoId = 0;   
 
 
 
 
   public int GenerarUnico()
+  //genera id's auto incrementados 
   {
     return ++ultimoId;
   }
 
   public void AltaExpediente(Expediente expediente, int IdUser, DateTime fechaCreacion, DateTime fechaModificacion)
+  //genera el alta de un expediente pasado desde program.cs
   {
       expediente.IdTramite = GenerarUnico();
       expediente.FechaYHoraCreacion = fechaCreacion;
@@ -34,7 +36,8 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
 
 
 
-  public void BajaExpediente(int IdTramite, int IdUser) //da de baja el expediente que le llega como param
+  public void BajaExpediente(int IdTramite, int IdUser) 
+  //da de baja el expediente con el id que le llega como parametro
   {
     List<Expediente> listaExpedientes = ExpedienteConsultaTodos();
     
@@ -58,9 +61,11 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
       sw.WriteLine(e.UsuarioUltModificacion);
       sw.WriteLine(e.Estado);
     }
+    Console.WriteLine($"se dio de baja el expediente y sus tramites asociados (si los tuviera)");
   } 
 
 public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fechaModificacion)
+//Modifica el expediente en los campos que pueden ser modificados 
 {
     List<Expediente> lExpedientes = ExpedienteConsultaTodos();
     bool expedienteEncontrado = false;
@@ -88,10 +93,6 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
     {
         Console.WriteLine($"Se modificó el expediente {expediente.IdTramite}");
     }
-    else
-    {
-        Console.WriteLine($"No se encontró un expediente con ID {expediente.IdTramite}");
-    }
   }
 
   public List<Expediente> ExpedienteConsultaTodos()
@@ -113,13 +114,13 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
         exp.Estado = (Estado)Enum.Parse(typeof(Estado), estadoStr);
         resultado.Add(exp);
       } 
-    //en resultado queda la lista de con todos los datos del txt expediente, SIN tramites. 
     return resultado;
   }
 
   
   
   public Expediente? ExpedienteConsultaPorId(int IdTramite)
+  //devuelve el expediente que coincida con el N° de tramite
   {
     Expediente? resultado = null;
 
@@ -137,9 +138,8 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
   }
 
 
-  //metodos accesorios
-
   public bool ExisteElId(int IdTramite)
+  //devuelte true si existe el Id del Expediente o false en caso contrario
   {
     List<Expediente> listaExpedientes = ExpedienteConsultaTodos();
     bool existe = false;

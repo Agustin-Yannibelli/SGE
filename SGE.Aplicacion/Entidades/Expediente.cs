@@ -13,7 +13,7 @@ public class Expediente
   
   public override string ToString()
   {
-      return $" tramite: {IdTramite}\n Caratula: {Caratula}\n Fecha y hora creacion: {FechaYHoraCreacion}\n Fecha y hora ultima modificacion {FechaYHoraUltModificacion}\n Estado: {Estado}\n ";
+      return $" tramite: {this.IdTramite}\n Caratula: {this.Caratula}\n Fecha y hora creacion: {this.FechaYHoraCreacion}\n Fecha y hora ultima modificacion {this.FechaYHoraUltModificacion}\n Estado: {this.Estado}\n  ";
   }
 
 }

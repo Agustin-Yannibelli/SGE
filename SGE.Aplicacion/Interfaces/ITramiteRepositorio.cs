@@ -4,8 +4,10 @@ namespace SGE.Aplicacion;
 public interface ITramiteRepositorio
 {
   void AltaTramite(Tramite tramite, int IdUser, DateTime fechaCreacion, DateTime fechaModificacion );
-  void BajaTramite(Tramite tramite, int IdUser);
-  void ModificacionTramite(Tramite tramite, int IdUser);
-  List<Tramite> ListarTramites(string etiqueta);
+  void BajaTramite(int IdTramite, int IdUser);
+  void ModificacionTramite(Tramite tramite, int IdUser, DateTime fechaModificacion);
+  List<Tramite> ListarTramitesSegunEtiqueta(string etiqueta);
   List<Tramite> ListaDeTramites();
+  bool ExisteEtiqueta(string etiqueta);
+  bool ExisteTramite(int IdTramite);
 }

@@ -5,7 +5,20 @@ public class ExpedienteConsultaTodosUseCase(IExpedienteRepositorio repoExp)
 {
   public List<Expediente> Ejecutar()
   {
-    List<Expediente> l = repoExp.ExpedienteConsultaTodos();
+      List<Expediente> l = new List<Expediente>();
+    try
+    {
+       l = repoExp.ExpedienteConsultaTodos();
+      if(l == null)
+      {
+        throw new RepositorioException($"la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
+      }
+      return l;
+    }
+    catch(RepositorioException ex)
+    {
+      Console.WriteLine($"Error de repositorio: {ex.Message}");
+    }
     return l;
   }
 }

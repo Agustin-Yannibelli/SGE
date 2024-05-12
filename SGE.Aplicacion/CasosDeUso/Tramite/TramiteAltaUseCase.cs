@@ -10,11 +10,12 @@ public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizac
     DateTime fechaModificacion = DateTime.Now;
     try
     {
-      if(!(servicioAutorizacion.PoseeElPermiso(IdUser,Permiso.TramiteAlta) && Validar(tramite,out string mensajeError)))
+      if(!servicioAutorizacion.PoseeElPermiso(IdUser,Permiso.TramiteAlta))
       {
         throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
       }
-      repoTram.AltaTramite(tramite,IdUser); 
+      if(!Validar(tramite))
+      repoTram.AltaTramite(tramite,IdUser, fechaCreacion, fechaModificacion); 
     }
     catch(AutorizacionException ex)
     {

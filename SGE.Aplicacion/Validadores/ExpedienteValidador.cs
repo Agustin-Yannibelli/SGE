@@ -2,26 +2,10 @@ namespace SGE.Aplicacion;
 
 public class ExpedienteValidador
 {
-  public bool Validar(string? Caratula, int UsuarioUltModificacion, out string mensajeError)
+  public bool Validar(Expediente expediente)
+  //evalua si el expediente cumple las validaciones
   {
-    try
-    {
-      mensajeError = "";
-      if(Caratula == null)
-      {
-        mensajeError = "La caratula del expediente no puede estar vacia.\n";
-      } 
-      if(UsuarioUltModificacion <= 0)
-      {
-        mensajeError += "Id de usuario invalido (se espera un entero mayor a cero)";
-      }
-      return (mensajeError == "");
-    }
-    catch(Exception e)
-    {
-      throw new ValidacionException(e.Message);
-    }
+      return (expediente.Caratula == null && expediente.UsuarioUltModificacion <= 0);
+    
   }
-
-  
 }

@@ -15,15 +15,17 @@ public class ExpedienteBajaUseCase(IExpedienteRepositorio repoExp, IServicioAuto
         {
           throw new RepositorioException("la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
         }
+
         repoExp.BajaExpediente(IdTramite, IdUser); 
+        
         List<Tramite> TramitesAEliminar = tramiteRepositorio.ListaDeTramites();
 
-        List<Tramite> copiaParaIterar = new List<Tramite>(TramitesAEliminar); //sin esto suele producir una Excepcion o errores
+        List<Tramite> copiaParaIterar = new List<Tramite>(TramitesAEliminar); 
         foreach(Tramite t in copiaParaIterar)
         {
           if(t.ExpedienteId == IdTramite)
           {
-            tramiteRepositorio.BajaTramite(t,IdUser);
+            tramiteRepositorio.BajaTramite(t.IdTramite,IdUser);
             TramitesAEliminar.Remove(t);
           }
         }

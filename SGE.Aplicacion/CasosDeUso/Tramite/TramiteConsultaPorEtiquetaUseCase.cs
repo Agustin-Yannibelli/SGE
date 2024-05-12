@@ -2,21 +2,27 @@ namespace SGE.Aplicacion;
 
 public class TramiteConsultaPorEtiquetaUseCase(ITramiteRepositorio repoTram)
 {
-  public void Ejecutar(Etiqueta etiqueta)
+  public List<Tramite> Ejecutar(Etiqueta etiqueta)
   {
+    List<Tramite> L = new List<Tramite>();
     string etiq= "";
     etiqueta = (Etiqueta)Enum.Parse(typeof(Etiqueta),etiq);
-
-
-    List<Tramite> l= repoTram.ListarTramites(etiq);
-
-    if(l.Count == 0) //si la lista esta vacia, no hay tramites con esa etiqueta entonces larga Exception
+    
+    try
     {
-      throw new RepositorioException("la entidad a la cual intenta acceder no existe en el repositorio");
+      bool esta = repoTram.ExisteEtiqueta(etiq);
+      if(!esta)
+      {
+        throw new RepositorioException("la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
+      }
+
+       L = repoTram.ListarTramitesSegunEtiqueta(etiq);
+       return L;
     }
-    foreach(Tramite t in l)
+    catch(RepositorioException ex)
     {
-      Console.WriteLine(t.ToString()); //esto listaria los tramites que devuelve la lista
+      Console.WriteLine($"Error de repositorio: {ex.Message}");
     }
+    return L;
   }
 }

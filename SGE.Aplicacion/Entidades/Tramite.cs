@@ -12,7 +12,7 @@ public class Tramite
   
   public override string ToString()
   {
-    return $"Tramite id = {IdTramite}";
+    return $"Tramite id = {this.IdTramite}\n pertenece al expediente {this.ExpedienteId}\n Etiqueta = {this.Etiqueta}\n Contenido = {this.ContenidoTramite}\n fecha creacion = {this.FechaYHoraCreacion}\n fecha ultima modificacion = {this.FechaYHoraUltModificacion}\n usuario ult. modificacion = {this.UsuarioUltModificacion}";
   }
 
 }
