@@ -17,6 +17,6 @@ public class ServicioActualizacionEstado
                 auxiliar = Estado.Finalizado;
                 break;
         }
-        EspecificacionCambioEstado.Especificar(auxiliar, expediente);
+        EspecificacionCambioEstado.Especificar(auxiliar, expediente); 
     }
 }

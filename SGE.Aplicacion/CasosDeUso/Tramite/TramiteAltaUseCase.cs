@@ -1,7 +1,7 @@
 namespace SGE.Aplicacion;
 
 
-public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizacion servicioAutorizacion):TramiteValidador
+public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizacion servicioAutorizacion, IExpedienteRepositorio expedienteRepositorio):TramiteValidador
 {
   public void Ejecutar(Tramite tramite, int IdUser)
   {
@@ -16,6 +16,18 @@ public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizac
       }
       if(!Validar(tramite))
       repoTram.AltaTramite(tramite,IdUser, fechaCreacion, fechaModificacion); 
+      var SActualizacion = new ServicioActualizacionEstado();
+      List<Expediente> lEx = expedienteRepositorio.ExpedienteConsultaTodos();
+      Expediente exp = new Expediente();
+      foreach(Expediente e in lEx)
+      {
+        if(e.IdTramite == tramite.ExpedienteId)
+        {
+          exp = e;
+          break;
+        }
+      }
+      SActualizacion.actualizar(tramite.Etiqueta,exp);
     }
     catch(AutorizacionException ex)
     {
