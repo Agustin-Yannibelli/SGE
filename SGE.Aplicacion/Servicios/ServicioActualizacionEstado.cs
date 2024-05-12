@@ -1,22 +1,31 @@
+using System.Linq.Expressions;
+
 namespace SGE.Aplicacion;
 
-public class ServicioActualizacionEstado
+public class ServicioActualizacionEstado(IExpedienteRepositorio repoExp)
 {
-    public void actualizar(Etiqueta etiqueta_tramite, Expediente expediente)
+
+    public void actualizar (int ExpedienteId, int IdUser, DateTime fechaModificacion)
     {
-        Estado auxiliar = expediente.Estado;
-        switch (etiqueta_tramite)
-        {
-            case Etiqueta.Resolucion:
-                auxiliar = Estado.ConResolucion;
-                break;
-            case Etiqueta.PaseAEstudio:
-                auxiliar = Estado.ParaResolver;
-                break;
-            case Etiqueta.PaseAArchivo:
-                auxiliar = Estado.Finalizado;
-                break;
-        }
-        EspecificacionCambioEstado.Especificar(auxiliar, expediente); 
+      Expediente? e = repoExp.ExpedienteConsultaPorId(ExpedienteId);
+
+     
+      List<Tramite>? ListaDeTram = new List<Tramite>();
+
+      if(e!=null) ListaDeTram = e.TramitesDelExpediente;
+
+      Etiqueta etiqueta;
+      
+      if(ListaDeTram != null && e!= null) 
+      { 
+        
+        var ultimo = ListaDeTram[ListaDeTram.Count -1];
+        etiqueta = ultimo.Etiqueta;
+
+        Estado estado = EspecificacionCambioEstado.Especificar(etiqueta, e.Estado);
+        e.Estado = estado;
+        repoExp.ActEstado(e,estado);
+      }
     }
+   
 }

@@ -4,6 +4,12 @@ public class TramiteValidador
 {
   public bool Validar(Tramite tramite)
   {
-    return (tramite.ContenidoTramite == null && tramite.UsuarioUltModificacion <= 0); 
+    if(tramite.ContenidoTramite == null && tramite.UsuarioUltModificacion<=0) 
+      { 
+        return false;
+      }else
+      {
+        return true;
+      }
   }
 }

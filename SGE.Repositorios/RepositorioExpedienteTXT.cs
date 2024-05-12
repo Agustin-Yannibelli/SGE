@@ -50,16 +50,17 @@ public class RepositorioExpedienteTXT : IExpedienteRepositorio
         listaModificada.Add(e);
       }
     }
-    using StreamWriter sw = new StreamWriter(_nombreArch,false);
-
-    foreach(Expediente e in listaModificada)
+    using (StreamWriter sw = new StreamWriter(_nombreArch,false))
     {
-      sw.WriteLine(e.IdTramite);
-      sw.WriteLine(e.Caratula);
-      sw.WriteLine(e.FechaYHoraCreacion);
-      sw.WriteLine(e.FechaYHoraUltModificacion);
-      sw.WriteLine(e.UsuarioUltModificacion);
-      sw.WriteLine(e.Estado);
+      foreach(Expediente e in listaModificada)
+      {
+        sw.WriteLine(e.IdTramite);
+        sw.WriteLine(e.Caratula);
+        sw.WriteLine(e.FechaYHoraCreacion);
+        sw.WriteLine(e.FechaYHoraUltModificacion);
+        sw.WriteLine(e.UsuarioUltModificacion);
+        sw.WriteLine(e.Estado);
+      }
     }
     Console.WriteLine($"se dio de baja el expediente y sus tramites asociados (si los tuviera)");
   } 
@@ -70,25 +71,27 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
     List<Expediente> lExpedientes = ExpedienteConsultaTodos();
     bool expedienteEncontrado = false;
 
-    using (StreamWriter sw = new StreamWriter(_nombreArch, false))
+    using (var sw = new StreamWriter(_nombreArch, false))
     {
-        foreach (Expediente e in lExpedientes)
+      foreach (Expediente e in lExpedientes)
+      {
+        if (e.IdTramite == expediente.IdTramite)
         {
-            if (e.IdTramite == expediente.IdTramite)
-            {
-                e.Caratula = expediente.Caratula;
-                e.FechaYHoraUltModificacion = fechaModificacion;
-                e.UsuarioUltModificacion = IdUser;
-                expedienteEncontrado = true;
-            }
-            sw.WriteLine(e.IdTramite);
-            sw.WriteLine(e.Caratula);
-            sw.WriteLine(e.FechaYHoraCreacion);
-            sw.WriteLine(e.FechaYHoraUltModificacion);
-            sw.WriteLine(e.UsuarioUltModificacion);
-            sw.WriteLine(e.Estado);
+          e.Caratula = expediente.Caratula;
+          e.FechaYHoraUltModificacion = fechaModificacion;
+          e.UsuarioUltModificacion = IdUser;
+          expedienteEncontrado = true;
         }
+        
+        sw.WriteLine(e.IdTramite);
+        sw.WriteLine(e.Caratula);
+        sw.WriteLine(e.FechaYHoraCreacion);
+        sw.WriteLine(e.FechaYHoraUltModificacion);
+        sw.WriteLine(e.UsuarioUltModificacion);
+        sw.WriteLine(e.Estado);
+       }
     }
+    
     if (expedienteEncontrado)
     {
         Console.WriteLine($"Se modificó el expediente {expediente.IdTramite}");
@@ -148,10 +151,16 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
       if(e.IdTramite == IdTramite)
       {
         existe = true;
+        break;
       }
     }
     return existe;
   }
-
-
+  
+  public void ActEstado(Expediente expediente, Estado estado)
+  {
+    expediente.Estado = estado;
+    using var sw = new StreamWriter(_nombreArch,false);
+    sw.WriteLine(expediente.Estado);
+  }
 }

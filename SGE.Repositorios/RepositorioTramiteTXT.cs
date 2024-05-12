@@ -43,18 +43,19 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
         listaModificada.Add(t);
       }
     }
-    using StreamWriter sw = new StreamWriter(_nombreArch,false);
-
-    foreach(Tramite t in listaModificada)
+    using (var  sw = new StreamWriter(_nombreArch,false))
     {
-      sw.WriteLine(t.IdTramite);
-      sw.WriteLine(t.ExpedienteId);
-      sw.WriteLine(t.Etiqueta);
-      sw.WriteLine(t.ContenidoTramite);
-      sw.WriteLine(t.FechaYHoraCreacion);
-      sw.WriteLine(t.FechaYHoraUltModificacion);
-      sw.WriteLine(t.UsuarioUltModificacion);
-    }  
+      foreach(Tramite t in listaModificada)
+      {
+        sw.WriteLine(t.IdTramite);
+        sw.WriteLine(t.ExpedienteId);
+        sw.WriteLine(t.Etiqueta);
+        sw.WriteLine(t.ContenidoTramite);
+        sw.WriteLine(t.FechaYHoraCreacion);
+        sw.WriteLine(t.FechaYHoraUltModificacion);
+        sw.WriteLine(t.UsuarioUltModificacion);
+      } 
+    } 
   }
 
   public void ModificacionTramite(Tramite tramite, int IdUser, DateTime fechaModificacion)
@@ -62,7 +63,7 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
     List<Tramite> lTramites = ListaDeTramites();
     bool tramiteEncontrado = false;
 
-    using (StreamWriter sw = new StreamWriter(_nombreArch, false))
+    using (var sw = new StreamWriter(_nombreArch, false))
     {
       foreach (Tramite t in lTramites)
       {
@@ -89,7 +90,7 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
     }
   }
 
-  public List<Tramite> ListarTramitesSegunEtiqueta(string etiquet)
+  public List<Tramite> ListarTramitesSegunEtiqueta(string etiquet) 
   {
     var resultado = new List<Tramite>();
     List<Tramite> ltramites = ListaDeTramites();
@@ -176,6 +177,6 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
     Tramite? ultimoTramite = null;
 
     ultimoTramite = listaTramites[listaTramites.Count-1];
-    return ultimoTramite;
+    return ultimoTramite; 
   }
 }

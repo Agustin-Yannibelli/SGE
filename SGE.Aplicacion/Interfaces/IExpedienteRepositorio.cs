@@ -14,5 +14,6 @@ public interface IExpedienteRepositorio
 
   bool ExisteElId(int IdTramite);
 
-    
+  void ActEstado(Expediente expediente, Estado estado);
+ 
 }

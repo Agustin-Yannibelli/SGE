@@ -1,5 +1,22 @@
 namespace SGE.Aplicacion;
 public class EspecificacionCambioEstado
 {
-    public static void Especificar(Estado estado_expediente, Expediente expediente) => expediente.Estado = estado_expediente; 
+    public static  Estado Especificar(Etiqueta etiqueta, Estado estado)
+    {
+      Estado auxiliar = estado;
+       switch (etiqueta)
+        {
+            case Etiqueta.Resolucion:
+                auxiliar = Estado.ConResolucion;
+                break;
+            case Etiqueta.PaseAEstudio:
+                auxiliar = Estado.ParaResolver;
+                break;
+            case Etiqueta.PaseAArchivo:
+                auxiliar = Estado.Finalizado;
+                break;
+        }
+        return auxiliar;
+      
+    } 
 }
