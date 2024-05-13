@@ -31,9 +31,9 @@ Expediente e2 = new Expediente(){Caratula="es la caratula 2 ", UsuarioUltModific
 Expediente e3 = new Expediente(){Caratula="es la caratula 3 ", UsuarioUltModificacion =user}; 
 
 Tramite t1 = new Tramite(){ExpedienteId = 1,Etiqueta = Etiqueta.EscritoPresentado,ContenidoTramite = "contenido 1",UsuarioUltModificacion =user};
-Tramite t2 = new Tramite(){ExpedienteId = 1,Etiqueta = Etiqueta.PaseAArchivo, ContenidoTramite = "contenido 2",UsuarioUltModificacion =user}; 
+Tramite t2 = new Tramite(){ExpedienteId = 1,Etiqueta = Etiqueta.EscritoPresentado, ContenidoTramite = "contenido 2",UsuarioUltModificacion =user}; 
 Tramite t3 = new Tramite(){ExpedienteId = 2,Etiqueta = Etiqueta.Despacho,ContenidoTramite = "contenido 3",UsuarioUltModificacion =user};
-Tramite t4 = new Tramite(){ExpedienteId = 2,Etiqueta = Etiqueta.Notificacion,ContenidoTramite = "contenido 4",UsuarioUltModificacion =user};
+Tramite t4 = new Tramite(){ExpedienteId = 2,Etiqueta = Etiqueta.EscritoPresentado,ContenidoTramite = "contenido 4",UsuarioUltModificacion =user};
 Tramite t5 = new Tramite(){ExpedienteId = 3,Etiqueta = Etiqueta.PaseAEstudio,ContenidoTramite = "contenido 5",UsuarioUltModificacion =user};
 Tramite t6 = new Tramite(){ExpedienteId = 3,Etiqueta = Etiqueta.Resolucion,ContenidoTramite = "contenido 6",UsuarioUltModificacion =user};
 
@@ -41,9 +41,6 @@ altaExpediente.Ejecutar(e1,user);
 altaExpediente.Ejecutar(e2,user);
 altaExpediente.Ejecutar(e3,user);
 
-Console.WriteLine(e1.Estado);
-Console.WriteLine(e2.Estado);
-Console.WriteLine(e3.Estado);
 
 AltaTramite.Ejecutar(t1,user);
 AltaTramite.Ejecutar(t2,user);
@@ -123,11 +120,16 @@ if(idTram != null)
 BajaTramite.Ejecutar(Idtramite,user);
 
 //carga de datos que modificaria de t6 
-ModificacionTramite.Ejecutar(t6,user);
+//ModificacionTramite.Ejecutar(t6,user);
 
 
-ConsultaPorEtiqueta.Ejecutar("EscritoPresentado");
+List<Tramite> tramitesPorEtiqueta = ConsultaPorEtiqueta.Ejecutar("EscritoPresentado");
 
+Console.WriteLine($"tamites que tienen como etiqueta EscritoPresentado");
+foreach(Tramite t in tramitesPorEtiqueta)
+{
+  Console.WriteLine(t.ToString());
+}
 
 
 

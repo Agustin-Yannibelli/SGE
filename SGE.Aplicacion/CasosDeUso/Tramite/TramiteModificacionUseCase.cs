@@ -18,7 +18,7 @@ public class TramiteModificacionUseCase(ITramiteRepositorio repoTram, IServicioA
         throw new RepositorioException("la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
       } 
       repoTram.ModificacionTramite(tramite,IdUser, fechaModificacion);
-      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar);
+      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar,repoTram);
       servicioActualizacionEstado.actualizar(tramite.ExpedienteId);
     }
     catch (AutorizacionException ex)

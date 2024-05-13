@@ -16,6 +16,7 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
     tramite.IdTramite = GenerarUnico();
     tramite.FechaYHoraCreacion = fechaCreacion;
     tramite.FechaYHoraUltModificacion = fechaModificacion;
+    tramite.UsuarioUltModificacion = IdUser;
     
     using (var sw = new StreamWriter(_nombreArch,true))
     {
@@ -43,7 +44,7 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
         listaModificada.Add(t);
       }
     }
-    using (var  sw = new StreamWriter(_nombreArch,false))
+    using (StreamWriter  sw = new StreamWriter(_nombreArch,false))
     {
       foreach(Tramite t in listaModificada)
       {
@@ -56,6 +57,7 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
         sw.WriteLine(t.UsuarioUltModificacion);
       } 
     } 
+    Console.WriteLine($"se dio de baja el tramite con id = {IdTramite}");
   }
 
   public void ModificacionTramite(Tramite tramite, int IdUser, DateTime fechaModificacion)
@@ -97,7 +99,7 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
 
     foreach(Tramite t in ltramites)
     {
-      if(t.Etiqueta.Equals(etiquet))
+      if(t.Etiqueta.ToString() == etiquet)
       {
         resultado.Add(t);
       }
@@ -148,7 +150,8 @@ public class RepositorioTramiteTXT : ITramiteRepositorio
     bool existe = false;
     foreach(Tramite t in listaTramites)
     {
-      if(t.Etiqueta.Equals(etiqueta))
+      
+      if(t.Etiqueta.ToString() == etiqueta)
       {
         existe = true;
         break;

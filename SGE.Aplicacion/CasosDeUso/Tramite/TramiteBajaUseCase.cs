@@ -28,7 +28,7 @@ public class TramiteBajaUseCase(ITramiteRepositorio repoTram, IServicioAutorizac
           break;
         }
       }
-      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar);
+      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar,repoTram);
       servicioActualizacionEstado.actualizar(tr.ExpedienteId);
     }
     catch (RepositorioException ex)

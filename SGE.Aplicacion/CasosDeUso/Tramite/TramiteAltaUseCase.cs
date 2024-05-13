@@ -15,13 +15,13 @@ public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizac
       {
         throw new AutorizacionException("El usuario no tiene autorizacion para realizar la accion");
       }
-      if(!Validar(tramite))
+      if(Validar(tramite))
       {
         throw new ValidacionException("la entidad no supera la validacion establecida, requiere Caratula y un Id valido");
       }
 
       repoTram.AltaTramite(tramite,IdUser, fechaCreacion, fechaModificacion);  
-      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar);
+      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar,repoTram);
       servicioActualizacionEstado.actualizar(tramite.ExpedienteId);
     }
     catch(AutorizacionException ex)
