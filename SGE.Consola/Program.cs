@@ -110,12 +110,23 @@ if(tram != null )
 }
 
 
+Console.WriteLine();
+
+Console.WriteLine("numero de tramite a dar de baja: ");
+string? idTram = Console.ReadLine();
+int Idtramite = 0; 
+if(idTram != null)
+{ 
+  Idtramite= int.Parse(idTram);
+  
+}
+BajaTramite.Ejecutar(Idtramite,user);
+
+//carga de datos que modificaria de t6 
+ModificacionTramite.Ejecutar(t6,user);
 
 
-
-
-
-
+ConsultaPorEtiqueta.Ejecutar("EscritoPresentado");
 
 
 

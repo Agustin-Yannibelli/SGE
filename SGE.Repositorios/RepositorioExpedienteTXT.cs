@@ -3,7 +3,7 @@ using SGE.Aplicacion;
 
 public class RepositorioExpedienteTXT : IExpedienteRepositorio
 {
-  readonly string _nombreArch = @"C:\Users\agust\OneDrive\Escritorio\proyectoExpedientes\SGE\SGE.Repositorios\Expedientes.txt";
+  readonly string _nombreArch = "Expedientes.txt";
   private int ultimoId = 0;   
 
 
