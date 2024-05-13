@@ -1,5 +1,3 @@
-
-
 namespace SGE.Aplicacion;
 
 public class ExpedienteAltaUseCase(IExpedienteRepositorio repoExp, IServicioAutorizacion servicioAutorizacion):ExpedienteValidador

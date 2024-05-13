@@ -101,23 +101,25 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
   public List<Expediente> ExpedienteConsultaTodos()
   /*genera la lista de expedientes (sin incluir sus tramites)*/
   {
-    var resultado = new List<Expediente>();
+    List<Expediente> resultado = new List<Expediente>();
 
   
-      using var sr = new StreamReader(_nombreArch);
-      while(!sr.EndOfStream)
+      using (var sr = new StreamReader(_nombreArch))
       {
-        var exp = new Expediente();
-        exp.IdTramite = int.Parse(sr.ReadLine() ?? "");
-        exp.Caratula = sr.ReadLine() ?? "";
-        exp.FechaYHoraCreacion = DateTime.Parse(sr.ReadLine() ?? "");
-        exp.FechaYHoraUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
-        exp.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
-        string estadoStr = sr.ReadLine() ?? "";
-        exp.Estado = (Estado)Enum.Parse(typeof(Estado), estadoStr);
-        resultado.Add(exp);
-      } 
-    return resultado;
+        while(!sr.EndOfStream)
+        {
+          var exp = new Expediente();
+          exp.IdTramite = int.Parse(sr.ReadLine() ?? "");
+          exp.Caratula = sr.ReadLine() ?? "";
+          exp.FechaYHoraCreacion = DateTime.Parse(sr.ReadLine() ?? "");
+          exp.FechaYHoraUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
+          exp.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+          string estadoStr = sr.ReadLine() ?? "";
+          exp.Estado = (Estado)Enum.Parse(typeof(Estado), estadoStr);
+          resultado.Add(exp);
+        } 
+      }
+      return resultado;
   }
 
   
