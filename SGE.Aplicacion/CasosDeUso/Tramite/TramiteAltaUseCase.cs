@@ -1,11 +1,12 @@
 namespace SGE.Aplicacion;
 
 
-public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizacion servicioAutorizacion, IExpedienteRepositorio expedienteRepositorio):TramiteValidador
+public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizacion servicioAutorizacion, IExpedienteRepositorio repoExp, IEspecificacionEstado especificar): TramiteValidador
 {
   public void Ejecutar(Tramite tramite, int IdUser)
   {
 
+    
     DateTime fechaCreacion = DateTime.Now;
     DateTime fechaModificacion = DateTime.Now;
     try
@@ -19,21 +20,9 @@ public class TramiteAltaUseCase(ITramiteRepositorio repoTram, IServicioAutorizac
         throw new ValidacionException("la entidad no supera la validacion establecida, requiere Caratula y un Id valido");
       }
 
-      repoTram.AltaTramite(tramite,IdUser, fechaCreacion, fechaModificacion); 
-
-      var SActualizacion = new ServicioActualizacionEstado(expedienteRepositorio);
-      List<Expediente> lEx = expedienteRepositorio.ExpedienteConsultaTodos();
-      Expediente exp = new Expediente();
-      foreach(Expediente e in lEx)
-      {
-        if(e.IdTramite == tramite.ExpedienteId)
-        {
-          exp = e;
-          break;
-        }
-      }
-      //SActualizacion.actualizar(tramite.Etiqueta,exp);
-      SActualizacion.actualizar(exp.IdTramite, IdUser, fechaModificacion);
+      repoTram.AltaTramite(tramite,IdUser, fechaCreacion, fechaModificacion);  
+      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar);
+      servicioActualizacionEstado.actualizar(tramite.ExpedienteId);
     }
     catch(AutorizacionException ex)
     {

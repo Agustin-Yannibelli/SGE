@@ -157,10 +157,37 @@ public void ModificarExpediente(Expediente expediente, int IdUser, DateTime fech
     return existe;
   }
   
-  public void ActEstado(Expediente expediente, Estado estado)
+ public void ActEstado(Expediente expediente)
   {
-    expediente.Estado = estado;
-    using var sw = new StreamWriter(_nombreArch,false);
-    sw.WriteLine(expediente.Estado);
+    List<Expediente> listaExpedientes = ExpedienteConsultaTodos();
+
+    foreach(Expediente e in listaExpedientes)
+    {
+      if(e.IdTramite == expediente.IdTramite)
+      {
+        e.Estado = expediente.Estado;
+        break;
+      }
+    }
+    using (StreamWriter sw = new StreamWriter(_nombreArch,false))
+    {
+      foreach(Expediente e in listaExpedientes)
+      {
+        if(e.IdTramite == expediente.IdTramite)
+        {
+          e.Estado = expediente.Estado;
+          
+        }
+        sw.WriteLine(e.IdTramite);
+        sw.WriteLine(e.Caratula);
+        sw.WriteLine(e.FechaYHoraCreacion);
+        sw.WriteLine(e.FechaYHoraUltModificacion);
+        sw.WriteLine(e.UsuarioUltModificacion);
+        sw.WriteLine(e.Estado);
+      }
+    }
+    Console.WriteLine($"se actualizo el estado del expediente a {expediente.Estado}");
+
   }
+
 }

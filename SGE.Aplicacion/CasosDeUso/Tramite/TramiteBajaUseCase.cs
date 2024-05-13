@@ -1,7 +1,7 @@
 namespace SGE.Aplicacion;
 
 
-public class TramiteBajaUseCase(ITramiteRepositorio repoTram, IServicioAutorizacion servicioAutorizacion)
+public class TramiteBajaUseCase(ITramiteRepositorio repoTram, IServicioAutorizacion servicioAutorizacion, IEspecificacionEstado especificar, IExpedienteRepositorio repoExp)
 {
   public void Ejecutar(int IdTramite, int IdUser)
   {
@@ -18,6 +18,18 @@ public class TramiteBajaUseCase(ITramiteRepositorio repoTram, IServicioAutorizac
         throw new RepositorioException("la entidad que intenta eliminar, modificar o acceder no existe en el repositorio");
       } 
       repoTram.BajaTramite(IdTramite,IdUser);
+      List<Tramite> lista_tramites = repoTram.ListaDeTramites();
+      Tramite tr = new Tramite();
+      foreach(Tramite t in lista_tramites)
+      {
+        if(IdTramite == t.IdTramite)
+        {
+          tr = t;
+          break;
+        }
+      }
+      ServicioActualizacionEstado servicioActualizacionEstado = new ServicioActualizacionEstado(repoExp,especificar);
+      servicioActualizacionEstado.actualizar(tr.ExpedienteId);
     }
     catch (RepositorioException ex)
     {

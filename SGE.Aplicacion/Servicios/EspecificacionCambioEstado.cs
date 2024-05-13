@@ -1,7 +1,7 @@
 namespace SGE.Aplicacion;
-public class EspecificacionCambioEstado
+public class EspecificacionCambioEstado : IEspecificacionEstado
 {
-    public static  Estado Especificar(Etiqueta etiqueta, Estado estado)
+    public  Estado Especificar(Etiqueta etiqueta, Estado estado)
     {
       Estado auxiliar = estado;
        switch (etiqueta)

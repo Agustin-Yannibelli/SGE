@@ -5,7 +5,7 @@ using SGE.Repositorios;
 IExpedienteRepositorio repoExp = new RepositorioExpedienteTXT();
 ITramiteRepositorio repoTram = new RepositorioTramiteTXT();
 IServicioAutorizacion servicioAutorizacion = new ServicioAutorizacionProvisorio();
-
+IEspecificacionEstado especificacionEstado = new EspecificacionCambioEstado();
 //casos de uso 
 
 var altaExpediente = new ExpedienteAltaUseCase(repoExp,servicioAutorizacion);
@@ -14,9 +14,9 @@ var ModificarExpediente = new ExpedienteModificarUseCase(repoExp,servicioAutoriz
 var ExpedienteConsultaPorId = new ExpedienteConsultaPorIdUseCase(repoExp, repoTram); //dev un array
 var ExpedienteConsultaTodos = new ExpedienteConsultaTodosUseCase(repoExp); //dev una lista 
 
-var AltaTramite = new TramiteAltaUseCase(repoTram,servicioAutorizacion,repoExp);
-var BajaTramite = new TramiteBajaUseCase(repoTram,servicioAutorizacion);
-var ModificacionTramite = new TramiteModificacionUseCase(repoTram, servicioAutorizacion);
+var AltaTramite = new TramiteAltaUseCase(repoTram,servicioAutorizacion,repoExp, especificacionEstado);
+var BajaTramite = new TramiteBajaUseCase(repoTram,servicioAutorizacion, especificacionEstado, repoExp);
+var ModificacionTramite = new TramiteModificacionUseCase(repoTram, servicioAutorizacion, especificacionEstado, repoExp);
 var ConsultaPorEtiqueta = new TramiteConsultaPorEtiquetaUseCase(repoTram);
 
 
@@ -30,47 +30,84 @@ Expediente e1 = new Expediente(){Caratula="es la caratula 1 ", UsuarioUltModific
 Expediente e2 = new Expediente(){Caratula="es la caratula 2 ", UsuarioUltModificacion =user}; 
 Expediente e3 = new Expediente(){Caratula="es la caratula 3 ", UsuarioUltModificacion =user}; 
 
-Tramite t1 = new Tramite(){ExpedienteId = 1,Etiqueta = Etiqueta.EscritoPresentado,ContenidoTramite = "contenido 1"};
-Tramite t2 = new Tramite(){ExpedienteId = 1,Etiqueta = Etiqueta.PaseAArchivo, ContenidoTramite = "contenido 2"}; 
-Tramite t3 = new Tramite(){ExpedienteId = 2,Etiqueta = Etiqueta.Despacho,ContenidoTramite = "contenido 3"};
-Tramite t4 = new Tramite(){ExpedienteId = 2,Etiqueta = Etiqueta.Notificacion,ContenidoTramite = "contenido 4"};
-Tramite t5 = new Tramite(){ExpedienteId = 3,Etiqueta = Etiqueta.PaseAEstudio,ContenidoTramite = "contenido 5"};
-Tramite t6 = new Tramite(){ExpedienteId = 3,Etiqueta = Etiqueta.Resolucion,ContenidoTramite = "contenido 6"};
+Tramite t1 = new Tramite(){ExpedienteId = 1,Etiqueta = Etiqueta.EscritoPresentado,ContenidoTramite = "contenido 1",UsuarioUltModificacion =user};
+Tramite t2 = new Tramite(){ExpedienteId = 1,Etiqueta = Etiqueta.PaseAArchivo, ContenidoTramite = "contenido 2",UsuarioUltModificacion =user}; 
+Tramite t3 = new Tramite(){ExpedienteId = 2,Etiqueta = Etiqueta.Despacho,ContenidoTramite = "contenido 3",UsuarioUltModificacion =user};
+Tramite t4 = new Tramite(){ExpedienteId = 2,Etiqueta = Etiqueta.Notificacion,ContenidoTramite = "contenido 4",UsuarioUltModificacion =user};
+Tramite t5 = new Tramite(){ExpedienteId = 3,Etiqueta = Etiqueta.PaseAEstudio,ContenidoTramite = "contenido 5",UsuarioUltModificacion =user};
+Tramite t6 = new Tramite(){ExpedienteId = 3,Etiqueta = Etiqueta.Resolucion,ContenidoTramite = "contenido 6",UsuarioUltModificacion =user};
 
-/*altaExpediente.Ejecutar(e1,user);
+altaExpediente.Ejecutar(e1,user);
 altaExpediente.Ejecutar(e2,user);
 altaExpediente.Ejecutar(e3,user);
+
+Console.WriteLine(e1.Estado);
+Console.WriteLine(e2.Estado);
+Console.WriteLine(e3.Estado);
 
 AltaTramite.Ejecutar(t1,user);
 AltaTramite.Ejecutar(t2,user);
 AltaTramite.Ejecutar(t3,user);
 AltaTramite.Ejecutar(t4,user);
 AltaTramite.Ejecutar(t5,user);
-AltaTramite.Ejecutar(t6,user);*/
+AltaTramite.Ejecutar(t6,user);
 
-
-
-
-Console.WriteLine(e1.Caratula);
-e1.Caratula= "caratula nueva";
-ModificarExpediente.Ejecutar(e1,user); //este deberia modificar los datos con los del expediente 
-/*Console.WriteLine("expedientes sin tramites\n"); 
-
-ExpedienteConsultaTodos.Ejecutar(); //funciona 
+Console.WriteLine(e1.Estado);
+Console.WriteLine(e2.Estado);
+Console.WriteLine(e3.Estado);
 
 Expediente e4 = new Expediente(){IdTramite = 1, Caratula = "caratula 4", UsuarioUltModificacion = 1};
+Console.WriteLine($"la caratula del expediente  {e1.IdTramite} : {e1.Caratula} se modifico por la del expediente {e4.Caratula} ");
+ModificarExpediente.Ejecutar(e4,user); //este deberia modificar los datos con los del expediente 
+Console.WriteLine(""); 
+Console.WriteLine("expedientes sin tramites\n"); 
 
-ModificarExpediente.Ejecutar(e4,1);
+List<Expediente> listaExpedientesSinTramites = ExpedienteConsultaTodos.Ejecutar(); 
 
-ExpedienteConsultaTodos.Ejecutar();
-//bajaExpediente.Ejecutar(3,user);
+foreach(Expediente e in listaExpedientesSinTramites)
+{
+  Console.WriteLine(e.ToString());
+}
+
+
+Console.WriteLine("ingrese el id del expediente que desea eliminar: ");
+int idEliminar= 0;
+string? id = Console.ReadLine();
+if(id != null)
+{
+  idEliminar = int.Parse(id);
+} 
+bajaExpediente.Ejecutar(idEliminar,user);
+
+
+Console.WriteLine(""); 
+Console.WriteLine(""); 
+Console.WriteLine(""); 
+Console.WriteLine("Lista de expedientes y sus tramites, ingrese un id de expediente a consultar: "); 
+int expedienteAConsultar = 0;
+string? exp = Console.ReadLine();
+if(exp != null)
+{
+  expedienteAConsultar = int.Parse(exp);
+}
 
 Expediente ex = new Expediente();
 
-ex = ExpedienteConsultaPorId.Ejecutar(2); 
+ex = ExpedienteConsultaPorId.Ejecutar(expedienteAConsultar);
 
-List<Tramite>? tram = ex.TramitesDelExpediente; //lista de tramites del expediente pasado al caso de uso */
+Console.WriteLine($"Consulta completa del expediente {ex.IdTramite}");
+Console.WriteLine(ex.ToString());
 
+List<Tramite>? tram = ex.TramitesDelExpediente; //lista de tramites del expediente pasado al caso de uso 
+
+Console.WriteLine($"Tramites del expediente {ex.IdTramite}");
+if(tram != null )
+{
+  foreach(Tramite t in tram)
+  {
+    Console.WriteLine(t.ToString());
+  }
+}
 
 
 
