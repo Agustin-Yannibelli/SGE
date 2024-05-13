@@ -49,13 +49,11 @@ AltaTramite.Ejecutar(t4,user);
 AltaTramite.Ejecutar(t5,user);
 AltaTramite.Ejecutar(t6,user);
 
-Console.WriteLine(e1.Estado);
-Console.WriteLine(e2.Estado);
-Console.WriteLine(e3.Estado);
 
+//Expediente modificado 
 Expediente e4 = new Expediente(){IdTramite = 1, Caratula = "caratula 4", UsuarioUltModificacion = 1};
-Console.WriteLine($"la caratula del expediente  {e1.IdTramite} : {e1.Caratula} se modifico por la del expediente {e4.Caratula} ");
-ModificarExpediente.Ejecutar(e4,user); //este deberia modificar los datos con los del expediente 
+
+ModificarExpediente.Ejecutar(e4,user); 
 Console.WriteLine(""); 
 Console.WriteLine("expedientes sin tramites\n"); 
 
